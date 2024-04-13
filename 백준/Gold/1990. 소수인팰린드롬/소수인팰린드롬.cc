@@ -22,6 +22,7 @@ int a, b;
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
+  cout.tie(0);
   cin >> a >> b;
   // 에라토스테네스의 채 O(sqrt(100,000,000)) 가능
   vector<bool> isprime(b+1, 1);
