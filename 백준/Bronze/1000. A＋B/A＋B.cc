@@ -1,12 +1,6 @@
-#include <iostream>
-
-using namespace std;
-
+#include <stdio.h>
 int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int a, b;
-	cin >> a >> b;
-	cout << a+b << '\n';
+  int a, b;
+  scanf("%d %d", &a, &b);
+  printf("%d", a+b);
 }
