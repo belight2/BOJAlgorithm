@@ -12,7 +12,6 @@ typedef vector<string> vs; typedef vector<bool> vb;
 const char nl = '\n';
 int n, t[505], deg[505], ans[505];
 vi adj[505];
-// #define DEBUG__
 int main() {
   cin.tie(0)->sync_with_stdio(0);
   cin >> n;
@@ -29,10 +28,6 @@ int main() {
     if(deg[i]) continue;
     ans[i] = t[i];
     q.push(i);
-#ifdef DEBUG__
-    cout << "no indegree vertex number is " << i << nl;
-    cout << "time : " << ans[i] << nl << nl;
-#endif
   }
   while(!q.empty()){
     auto cur = q.front(); q.pop();
@@ -40,20 +35,8 @@ int main() {
       ans[nxt] = max(ans[nxt], t[nxt] + ans[cur]);
       if(--deg[nxt] == 0){
         q.push(nxt);
-#ifdef DEBUG__
-  cout << "next vertex is " << nxt << nl;
-  cout << "current next_vertext time : " << ans[nxt] << nl << nl;
-#endif
       }
     }
   }
   for(int i = 1; i <= n; i++) cout << ans[i] << nl;
-
-#ifdef DEBUG__
-  for(int i = 1; i <= n; i++){
-    cout << "current vertex : " << i << nl;
-    cout << "count of indegree : " << deg[i] << nl;
-    cout << "vertex's time : " << t[i] << nl << nl;
-  }
-#endif
 }
