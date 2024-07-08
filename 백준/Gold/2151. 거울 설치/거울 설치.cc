@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
-typedef tuple<int, int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
 typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
 typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
 typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
@@ -11,15 +11,15 @@ typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef que
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 const char nl = '\n';
-// 남, 동, 북, 서
 const int dx[4] = { 1, 0, -1, 0 };
 const int dy[4] = { 0, 1, 0, -1 };
-vs board(55);
-bool vis[55][55][2505];
 int n, sx, sy, ex, ey;
+int vis[55][55];
 int main() {
   cin.tie(0)->sync_with_stdio(0);
   cin >> n;
+  vs board(n);
+  fill(&vis[0][0], &vis[n][n], -1);
   for(int i = 0; i < n; i++){
     cin >> board[i];
     for(int j = 0; j < n; j++){
@@ -29,31 +29,23 @@ int main() {
       }
     }
   }
-  int ans = 1e5;
-  queue<ti> q;
-  for(int dir = 0; dir < 4; dir++) q.push({sx, sy, 0, dir});
-  vis[sx][sy][0] = 1;
+  qpi q;
+  q.push({sx, sy});
+  vis[sx][sy] = 0;
   while(!q.empty()){
-    auto &[cx, cy, m, dir] = q.front(); q.pop();
-    if(cx == ex && cy == ey) ans = min(ans, m);
-    if(board[cx][cy] == '*') continue;
-    if(board[cx][cy] == '!'){
-      int ndir = (dir+1)%4, pdir = (dir+3)%4;
-      int nx = cx + dx[ndir]; int ny = cy + dy[ndir];
-      int px = cx + dx[pdir]; int py = cy + dy[pdir];
-      if(nx >= 0 && nx < n && ny >= 0 && ny < n && !vis[nx][ny][m+1]){
-        q.push({nx, ny, m+1, ndir});
-        vis[nx][ny][m+1] = 1;
-      }
-      if(px >= 0 && px < n && py >= 0 && py < n && !vis[px][py][m+1]){
-        q.push({px, py, m+1, pdir});
-        vis[px][py][m+1] = 1;
+    auto &[cx, cy] = q.front(); q.pop();
+    for(int dir = 0; dir < 4; dir++){
+      int nx = cx + dx[dir];
+      int ny = cy + dy[dir];
+      while(0 <= nx && nx < n && 0 <= ny && ny < n && board[nx][ny] != '*'){
+        if(vis[nx][ny] == -1){
+          vis[nx][ny] = vis[cx][cy] + 1;
+          if(board[nx][ny] == '!') q.push({nx, ny});
+        }
+        nx += dx[dir];
+        ny += dy[dir];
       }
     }
-    int nx = cx + dx[dir];
-    int ny = cy + dy[dir];
-    if(nx < 0 || nx >= n || ny < 0 || ny >= n || vis[nx][ny][m]) continue;
-    q.push({nx, ny, m, dir});
   }
-  cout << ans;
+  cout << vis[ex][ey] - 1;
 }
