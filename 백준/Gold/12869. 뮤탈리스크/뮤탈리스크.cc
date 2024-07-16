@@ -11,25 +11,21 @@ typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef que
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 const char nl = '\n';
-const int INF = 1e9;
+const int INF = 1e9+10;
 int n;
 int h[4];
 int d[70][70][70];
-int dmg[6][3] = {
-  { 9, 3, 1 },
-  { 9, 1, 3 },
-  { 3, 9, 1 },
-  { 3, 1, 9 },
-  { 1, 9, 3 },
-  { 1, 3, 9 }
-};
+int dmg[3] = { 1, 3, 9 };
 int dp(int a, int b, int c){
   if(a <= 0 && b <= 0 && c <= 0) return 0;
   a = max(a, 0);
   b = max(b, 0);
   c = max(c, 0);
   if(d[a][b][c] != INF) return d[a][b][c];
-  for(int i = 0; i < 6; i++) d[a][b][c] = min(d[a][b][c], 1 + dp(a-dmg[i][0], b - dmg[i][1], c - dmg[i][2]));
+  sort(dmg, dmg+3);
+  do{
+    d[a][b][c] = min(d[a][b][c], 1 + dp(a-dmg[0], b - dmg[1], c - dmg[2]));
+  }while(next_permutation(dmg, dmg+3));
   return d[a][b][c];
 }
 int main(){
