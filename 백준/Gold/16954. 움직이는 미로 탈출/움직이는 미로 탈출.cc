@@ -21,7 +21,7 @@ int main() {
 
   for(int i = 1; i <= 8; i++){
     for(int j = 1; j < 8; j++) board[i][j] = board[i-1][j-1];
-    board[i][0] = string(8, '.');
+    board[i][0] = "........";
   }
   qti q;
   q.push({0, 7, 0});
