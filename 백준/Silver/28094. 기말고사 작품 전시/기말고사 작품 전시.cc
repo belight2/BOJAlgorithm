@@ -16,7 +16,7 @@ void solve(){
   int n{}, m{}, a[10][10];
   cin >> n >> m;
   vi work(n);
-  map<int, int> ans;
+  unordered_map<int, int> ans;
   for(int i = 0; i < n; i++) work[i] = i+1;
   memset(a, 0, sizeof(a));
   while(m--){
