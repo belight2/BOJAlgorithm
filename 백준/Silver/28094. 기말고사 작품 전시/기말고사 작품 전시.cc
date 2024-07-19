@@ -16,15 +16,14 @@ void solve(){
   int n{}, m{}, a[10][10];
   cin >> n >> m;
   vi work(n);
-  unordered_map<int, int> ans;
-  for(int i = 0; i < n; i++) work[i] = i+1;
   memset(a, 0, sizeof(a));
+  iota(all(work), 1);
   while(m--){
     int v, x, y;
     cin >> v >> x >> y;
     a[x][y] += v; 
   }
-  int mx{};
+  int mx = -1, cnt{};
   do {
     int cur{};
     for(int i = 0; i < n; i++){
@@ -32,11 +31,11 @@ void solve(){
         cur += a[work[i]][work[j]];
       }
     }
-    mx = max(mx, cur);
-    (ans.find(cur) == ans.end()) ? ans[cur] = 1 : ans[cur]++;
+    if(cur > mx){ mx = cur; cnt = 1;}
+    else if(cur == mx) cnt++;
   } while (next_permutation(all(work))) ;
-  cout << mx << ' ' << ans[mx] << nl;
-}
+  cout << mx << ' ' << cnt << nl;
+} 
 int main() {
   fastio(nullptr, false);
   int t{};
