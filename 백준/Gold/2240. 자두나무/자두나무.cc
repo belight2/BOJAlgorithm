@@ -25,8 +25,8 @@ int main() {
   for(int j = 1; j <= w; j++){
     for(int i = 1; i <= t; i++){
       d[i][j] = max(d[i-1][j], d[i-1][j-1]);
-      if(a[i] == 1 && !(j&1)) d[i][j]++;
-      else if(a[i] == 2 && j&1 ) d[i][j]++;
+      if((a[i]&1) && !(j&1)) d[i][j]++;
+      else if(!(a[i]&1) && j&1 ) d[i][j]++;
     }
   }
   cout << *max_element(d[t], d[t]+w+1);
