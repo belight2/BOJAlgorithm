@@ -21,7 +21,7 @@ int main() {
   cin >> n >> k;
   for(int i = 1; i <= n; i++) cin >> w[i].X >> w[i].Y >> b[i].X >> b[i].Y;
   d[1][w[1].X] = w[1].Y;
-  d[1][b[1].X] = b[1].Y;
+  d[1][b[1].X] = max(d[1][b[1].X], b[1].Y);
   for(int i = 1; i <= n-1; i++){
     for(int j = 0; j <= k; j++){
       if(!d[i][j]) continue;
