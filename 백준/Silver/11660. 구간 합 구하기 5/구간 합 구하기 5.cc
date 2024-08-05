@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 int main(){
-  cin.tie(nullptr)->sync_with_stdio(false);
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
   int n, m;
   cin >> n >> m;
   vector<vector<int>> a(n+1, vector<int>(n+1));
