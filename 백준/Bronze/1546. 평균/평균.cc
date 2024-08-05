@@ -11,6 +11,5 @@ int main(){
   for(auto &cur : a) cin >> cur;
   int tot = accumulate(a.begin(), a.end(), 0);
   int mx = *max_element(a.begin(), a.end());
-  double ans = tot * 100.0 / mx / n;
-  cout << ans;
+  cout << double(tot * 100.0 / mx / n);
 }
