@@ -1,17 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 using namespace std;
 int main(){
   cin.tie(nullptr)->sync_with_stdio(false);
-  int n{};
+  int n;
   cin >> n;
-  vector<double> a(n);
+  vector<int> a(n);
   for(auto &cur : a) cin >> cur;
-  sort(a.rbegin(), a.rend());
-  double tot{};
-  for(int i = 0; i < n; i++){
-    tot += a[i] / a[0] * 100.0;
-  }
-  cout << tot / double(n);
+  int tot = accumulate(a.begin(), a.end(), 0);
+  int mx = *max_element(a.begin(), a.end());
+  double ans = tot * 100.0 / mx / n;
+  cout << ans;
 }
