@@ -1,36 +1,35 @@
-#include <iostream>
-#include <stack>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-char res[1000001];
-int arr[1000001], pos = 0 ,cur = 0;
+int n;
 
-int main(void){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int t, n;
-	stack<int> stk;
-	cin >> t;
-	
-	for(int i = 0; i< t; i++){
-		cin >> n;
-		arr[i] = n;
-	}
-	
-	for(int i = 1; i <= t; i++){
-		stk.push(i);
-		res[cur++] = '+';
-		while( stk.top() == arr[pos] ){
-			res[cur++] = '-';
-			stk.pop();
-			pos++;
-			if(stk.empty()) break;
-		}
-	}
-	
-	if( cur == 2*t){
-		for(int i = 0; i < cur; i++) cout << res[i] << '\n';
-	}
-	else cout << "NO";	
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);  
+
+  cin >> n;
+
+  vector<int> a(n);
+  for(auto &x : a) cin >> x;
+
+  stack<int> stk;
+  auto it = a.begin();
+ 
+  string ans{};
+  for(int cur = 1; cur <= n; cur++){
+    stk.push(cur);
+    ans += '+';
+    while(stk.size() && stk.top() == *it){
+      stk.pop();
+      ans += '-';
+      it++;
+    }
+  }
+  
+  if(ans.size() != 2*n){
+    cout << "NO";
+    return 0;
+  }
+
+  for(char &c : ans) cout << c << '\n';
 }
