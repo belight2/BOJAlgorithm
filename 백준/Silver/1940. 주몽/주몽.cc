@@ -1,26 +1,37 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int n, m;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-int main(){
-  cin.tie(nullptr)->sync_with_stdio(false);
-  
-  cin >> n >> m;
+    int N, M;
+    cin >> N >> M;
+    vector<int> A(N, 0);
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+    sort(A.begin(), A.end());
 
-  vector<int> a(n);
-  for(auto &num : a) cin >> num;
-
-  sort(a.begin(), a.end());
-
-  int ans{};
-  int en = n-1;
-  for(int st = 0; ; st++){
-    while(en > st && a[st]+a[en] > m) en--;
-    if(en <= st) break;
-    if(a[st]+a[en] == m) ans++;
-  }
-
-  cout << ans;
+    int count = 0;
+    int i = 0;
+    int j = N - 1;
+    while (i < j) { //투 포인터 이동 원칙에 따라 포인터를 이동하여 처리
+        if (A[i] + A[j] < M) {
+            i++;
+        }
+        else if (A[i] + A[j] > M) {
+            j--;
+        }
+        else {
+            count++;
+            i++;
+            j--;
+        }
+    }
+    cout << count << "\n";
 }
