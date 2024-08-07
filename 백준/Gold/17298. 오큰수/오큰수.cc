@@ -16,11 +16,8 @@ int main(){
   vector<int> ans(n, -1);
   stack<pi> stk;
   int cur;
-  
-  cin >> cur;
-  stk.push({cur, 0});
 
-  for(int i = 1; i < n; i++){
+  for(int i = 0; i < n; i++){
     cin >> cur;
     while(stk.size() && stk.top().X < cur){
       ans[stk.top().Y] = cur;
