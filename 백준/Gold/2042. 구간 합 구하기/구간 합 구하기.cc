@@ -15,10 +15,6 @@ typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef que
 const char nl = '\n';
 int n, m, k;
 ll tree[2'000'000];
-void build(vl &a){
-  for(int i = 0; i < n; i++) tree[i+n] = a[i];
-  for(int i = n-1; i > 0; --i) tree[i] = tree[i<<1] + tree[i<<1|1];
-}
 void update(int p, ll val){
   p += n;
   tree[p] = val;
@@ -35,10 +31,9 @@ ll sum(int l, int r){
 int main() {
   fastio(nullptr, false);
   cin >> n >> m >> k;
-  vl a(n);
-  for(auto &x : a) cin >> x;
-  
-  build(a);
+  for(int i = 0; i < n; i++) cin >> tree[i+n]; 
+  for(int i = n-1; i > 0; --i) tree[i] = tree[i<<1] + tree[i<<1|1];
+   
   m += k;
   while(m--){
     ll a, b, c;
