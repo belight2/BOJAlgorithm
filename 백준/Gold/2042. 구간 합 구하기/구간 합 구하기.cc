@@ -1,50 +1,49 @@
 #include <bits/stdc++.h>
-
 using namespace std;
-
-using ll = long long;
-
-template<typename T>
-class SegmentTree{
-  private:
-    T *Tree;
-    int N;
-  public:
-    SegmentTree(vector<T> &A){
-      N = A.size();
-      Tree = new T[N * 2];
-      for(int i = 0; i < N; i++) Tree[N+i] = A[i];
-      for(int i = N-1; i > 0; --i) Tree[i] = Tree[i<<1] + Tree[i<<1 | 1];
-    }
-    ~SegmentTree(){ delete [] Tree; }
-    void update(int p, T value){
-      Tree[p+N] = value;
-      p = p + N;
-
-      for(int i = p; i > 1; i >>= 1) Tree[i>>1] = Tree[i]+Tree[i^1];
-    }
-    T sum(int l, int r){
-      T ret{};
-      for( l += N, r += N; l < r; l >>= 1, r >>= 1){
-        if(l&1) ret += Tree[l++];
-        if(r&1) ret += Tree[--r];
-      }
-      return ret;
-    }
-};
-
+typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
+typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
+typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
+#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
+#define X first
+#define Y second
+#define pb push_back
+#define sz(x) (int((x).size()))
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+const char nl = '\n';
 int n, m, k;
-int main(){
-  cin.tie(nullptr)->sync_with_stdio(false);
+ll tree[2'000'000];
+void build(vl &a){
+  for(int i = 0; i < n; i++) tree[i+n] = a[i];
+  for(int i = n-1; i > 0; --i) tree[i] = tree[i<<1] + tree[i<<1|1];
+}
+void update(int p, ll val){
+  p += n;
+  tree[p] = val;
+  for(int i = p; i > 1; i>>=1) tree[i>>1] = tree[i] + tree[i^1];
+}
+ll sum(int l, int r){
+  ll ret{};
+  for(l+=n, r+=n; l < r; l>>=1, r>>=1){
+    if(l&1) ret += tree[l++];
+    if(r&1) ret += tree[--r];
+  }
+  return ret;
+}
+int main() {
+  fastio(nullptr, false);
   cin >> n >> m >> k;
-  vector<ll> a(n);
+  vl a(n);
   for(auto &x : a) cin >> x;
-  SegmentTree<ll> ST(a);
+  
+  build(a);
   m += k;
   while(m--){
     ll a, b, c;
     cin >> a >> b >> c;
-    if(a&1) ST.update(b-1, c);
-    else cout << ST.sum(b-1, c) << '\n';
+    if(a&1) update(b-1, c);
+    else cout << sum(b-1, c) << nl;
   }
 }
