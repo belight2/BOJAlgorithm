@@ -1,32 +1,24 @@
-// DO it! C++ 코딩 테스트 예제 코드 확인차 제출(AC 여부)
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <deque>
-using namespace std;
-typedef pair<int, int> Node;
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+#include <bits/stdc++.h>
 
-    int N, L;
-    cin >> N >> L;
-    deque<Node> mydeque;
-    
-    for (int i = 0; i < N; i++) {
-        int now;
-        cin >> now;
-        // 새로운 값이 들어 올 때마다 정렬하지 않고 현재 수보다 큰 값을 덱에서 제거함으로써 시간복잡도를 줄일 수 있음
-        while (mydeque.size() && mydeque.back().first > now) {
-            mydeque.pop_back();
-        }
-        mydeque.push_back(Node(now, i));
-        // 범위에서 벗어난 값은 덱에서 제거
-        if (mydeque.front().second <= i - L) {
-            mydeque.pop_front();
-        }
-        cout << mydeque.front().first << ' ';
-    }
+using namespace std;
+
+int n, l;
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
+
+  cin >> n >> l;
+
+  vector<int> a(n);
+  for(auto &x : a) cin >> x;
+
+  deque<int> dq;
+  for(int i = 0; i < n; i++){
+    if(dq.size() && i - dq.front() == l) dq.pop_front();
+    while(dq.size() && a[dq.back()] >= a[i]) dq.pop_back();
+    dq.push_back(i);
+    cout << a[dq.front()] << " ";
+  }
 }
