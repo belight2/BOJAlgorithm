@@ -1,14 +1,12 @@
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
+
 using namespace std;
+
+int n;
+string number;
+
 int main(){
   cin.tie(nullptr)->sync_with_stdio(false);
-  int n{};
-  string number{};
   cin >> n >> number;
-  int ans{};
-  for(int i = 0; i < n; i++){
-    ans += number[i] - '0';
-  }
-  cout << ans;
+  cout << accumulate(number.begin(), number.end(), 0) - '0' * n;
 }
