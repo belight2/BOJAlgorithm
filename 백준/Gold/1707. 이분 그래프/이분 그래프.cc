@@ -1,43 +1,52 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <bits/stdc++.h>
+
 using namespace std;
-const char nl = '\n';
-int t;
-void solve(){
-  int n, m, u, v;
-  cin >> n >> m;
-  vector<vector<int>> adj(n+1);
-  vector<int> vis(n+1, 0);
+
+int t, n, m, u, v;
+
+vector<int> adj[20'005];
+vector<int> vis;
+
+bool bfs(int st){
   queue<int> q;
+  vis[st] = 1;
+  q.push(st);
+  while(!q.empty()){
+    auto cur = q.front(); q.pop();
+    for(auto nxt : adj[cur]){
+      if(vis[nxt] == vis[cur]) return 1;
+      if(vis[nxt] != 0) continue;
+      vis[nxt] = -vis[cur];
+      q.push(nxt);
+    }
+  }
+  return 0;
+}
+
+void solve(){
+  cin >> n >> m;
+  
+  for(int i = 1; i <= n; i++) vector<int> ().swap(adj[i]);
+  vector<int> ().swap(vis);
+  vis.resize(n+1);
+
   while(m--){
     cin >> u >> v;
     adj[u].push_back(v);
     adj[v].push_back(u);
   }
+  
+  bool ans{};
   for(int i = 1; i <= n; i++){
     if(vis[i] != 0) continue;
-    q.push(i);
-    vis[i] = 1;
-    while(!q.empty()){
-      auto cur = q.front(); q.pop();
-      for(auto nxt : adj[cur]){
-        if(vis[nxt] != 0){
-          if(vis[nxt] == vis[cur]){
-            cout << "NO" << nl; return;
-          }
-          else continue;
-        }
-        vis[nxt] = vis[cur] * -1;
-        q.push(nxt);
-      }
-    }
+    if(ans = bfs(i)) break;
   }
-  cout << "YES" << nl;
+  
+  cout << (ans ? "NO" : "YES") << '\n';
 }
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false); 
   cin >> t;
   while(t--) solve();
 }
