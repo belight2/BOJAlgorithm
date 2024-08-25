@@ -19,14 +19,8 @@ priority_queue<pi, vector<pi>, greater<pi>> mnpq;
 bool vis[1'000'000];
 
 void delete_invalid_index(){
-    while(mxpq.size() && vis[mxpq.top().Y]){
-        cout << "unvalid index" << mxpq.top().Y << '\n';
-        mxpq.pop();
-    }
-    while(mnpq.size() && vis[mnpq.top().Y]){
-        cout << "unvalid index" << mnpq.top().Y << '\n';
-        mnpq.pop();
-    }
+    while(mxpq.size() && vis[mxpq.top().Y]) mxpq.pop();
+    while(mnpq.size() && vis[mnpq.top().Y]) mnpq.pop();
 }
 
 vector<int> solution(vector<string> oper) {
