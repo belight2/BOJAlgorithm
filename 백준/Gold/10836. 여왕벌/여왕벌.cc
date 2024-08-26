@@ -19,32 +19,20 @@ int n, m;
 int main() {
   fastio(nullptr, false);
 
-  cin >> n >> m;
-  vector<vi> h(n, vi(n, 1)); // 벌집
-  vi g(2*n-1, 0);
-  while(m--){
+  cin >> m >> n;
+
+  vi g(2*m-1, 1);
+
+  while(n--){
     int a, b, c;
     cin >> a >> b >> c;
-    int i{};
-    while(a--) i++;
-    while(b--) g[i++] += 1;
-    while(c--) g[i++] += 2;
-  }
-  int cx = n-1, cy = 0;
-  for(int idx = 0; idx < sz(g); idx++){
-    if(cx > 0) h[cx--][cy] += g[idx];
-    else h[cx][cy++] += g[idx];
-  }
-
-  for(int i = 1; i < n; i++){
-    for(int j = 1; j < n; j++){
-      h[i][j] = max({h[i-1][j-1], h[i][j-1], h[i-1][j]});
-    }
+    for(int idx = a; idx < a + b; idx++) g[idx]++;
+    for(int idx = a+b; idx < sz(g); idx++) g[idx]+=2;
   }
   
-  for(int i = 0; i < n; i++){
-    for(int j = 0; j < n; j++){
-      cout << h[i][j] << ' ';
+  for(int i = 0; i < m; i++){
+    for(int j = 0; j < m; j++){
+      cout << (j == 0 ? g[m - i - 1] : g[m + j - 1]) << " ";
     }
     cout << nl;
   }
