@@ -1,20 +1,26 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
-int a[100005];
+
 int n;
+int a[100005];
+vector<bool> chk(100005); 
+
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin >> n;
-    for(int i = 0; i < n; i++) cin >> a[i];
-    vector<bool> part(n+1, false);
-    part[a[0]] = true;
-    int en = 1; long long ans = 0;
-    for(int st = 0; st < n; st++){
-        while(en < n && !part[a[en]]) part[a[en++]] = true;
-        ans += en - st;
-        part[a[st]] = false;
-    }
-    cout << ans;
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
+  cin >> n;
+  for(int i = 0; i < n; i++) cin >> a[i];
+
+  // solve
+  int en{};
+  long long ans{};
+  for(int st = 0; st < n; st++){
+    while(en < n && !chk[a[en]]) chk[a[en++]] = 1;
+    ans += en - st;
+    chk[a[st]] = 0;
+  }
+
+  // output
+  cout << ans;
 }
