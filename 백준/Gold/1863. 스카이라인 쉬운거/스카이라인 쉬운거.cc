@@ -1,32 +1,29 @@
+// Authored by : chjh2129
 #include <bits/stdc++.h>
-#define X first
-#define Y second
-#define pb push_back
-#define ll long long
-#define all(x) x.begin(), x.end()
-#define rall(x) x.rbegin(), x.rend()
 using namespace std;
-using pi = pair<int,int>;
-const char nl = '\n';
+
 int n;
-int y[1000005];
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
+int y[1'000'005];
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
   cin >> n;
-  int gbg;
-  for(int i = 0; i < n; i++) cin >> gbg >> y[i];
-  y[n] = 0;
+  int tmp; // x값은 버리고 높이 y값만 입력받는다.
+  for(int i = 0; i < n; i++) cin >> tmp >> y[i];
+
+  // solve;
+  int ans{};
   stack<int> stk;
-  ll ans = 0;
-  for(int i = 0; i <= n; i++){
-    int cur = y[i];
-    if(stk.empty() || stk.top() < cur) stk.push(cur);
-    while(!stk.empty() && stk.top() > cur){
-      stk.pop(); ans++;
+  for(int i = 0; i < n; i++){
+    while(!stk.empty() && stk.top() > y[i]) stk.pop();
+    if(y[i] && (stk.empty() || stk.top() < y[i])){
+      stk.push(y[i]);
+      ans++;
     }
-    if(cur == 0 || (!stk.empty() && stk.top() == cur)) continue;
-    stk.push(cur);
   }
+
+  // output
   cout << ans;
 }
