@@ -1,23 +1,27 @@
-#include <iostream>
-#include <algorithm>
+// authored by : chjh2129
+#include <bits/stdc++.h>
 using namespace std;
-int n, s, a[100005];
+
+const int INF = 0x7fffffff;
+int n, s;
+int a[100'005];
+
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin >> n >> s;
-    for(int i = 0; i < n; i++) cin >> a[i];
-    int res = 0x7fffffff;
-    int st = 0, en = 1, tot = a[0];
-    for(; st < n; st++){
-        while(en <= n && tot < s ){
-            en++;
-            tot += a[en-1];
-        }
-        if(en == n+1) break;
-        res = min(res, en - st);
-        tot -= a[st];
-    }
-    if(res == 0x7fffffff) cout << 0;
-    else cout << res;
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
+  cin >> n >> s;
+  for(int i = 0; i < n; i++) cin >> a[i];
+
+  // solve
+  int ans = INF;
+  int tot{}, en{};
+  for(int st = 0; st < n; st++){
+    while(en < n && tot < s) tot += a[en++];
+    if(tot >= s) ans = min(ans, en - st);
+    tot -= a[st];
+  }
+
+  // output
+  cout << (ans == INF ? 0 : ans);
 }
