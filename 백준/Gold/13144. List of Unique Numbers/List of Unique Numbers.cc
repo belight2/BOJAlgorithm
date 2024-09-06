@@ -3,7 +3,10 @@ using namespace std;
 
 int n;
 int a[100005];
-vector<bool> chk(100005); 
+
+// 
+// vector<bool> chk(100005); 
+bool chk[100005];
 
 int main(){
   cin.tie(nullptr)->sync_with_stdio(false);
