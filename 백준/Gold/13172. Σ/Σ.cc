@@ -32,7 +32,6 @@ int main() {
   cin >> m;
   while(m--){
     cin >> n >> s;
-    if(s%n)
     ans = (ans + (s * rpow(n, MOD-2)) % MOD) % MOD;
   }
 
