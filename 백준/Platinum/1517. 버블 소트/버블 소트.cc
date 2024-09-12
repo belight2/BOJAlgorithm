@@ -1,68 +1,43 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-void merget_sort(int s, int e);
-static vector<int> A;
-static vector<int> tmp;
-static long result;
+int n;
+int a[500'005];
+long long ans;
 
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    int N;
-    cin >> N;
-    A = vector<int>(N + 1, 0);
-    tmp = vector<int>(N + 1, 0);
-    for (int i = 1; i <= N; i++) {
-        cin >> A[i];
+void merge(int st, int mid, int en){
+  vector<int> v;
+  int i = 0, j = 0, len1 = mid - st, len2 = en - mid;
+  while(i < len1 && j < len2){
+    if(a[st+i] > a[mid+j]){
+      ans += len1 - i;
+      v.push_back(a[mid+j++]);
     }
-    result = 0;
-    merget_sort(1, N); // 병합정렬 수행하기
-    
-    cout << result << "\n";
+    else v.push_back(a[st+i++]);
+  }
+  while(i < len1) v.push_back(a[st+i++]);
+  while(j < len2) v.push_back(a[mid+j++]);
+  for(int i = st; i < en; i++) a[i] = v[i-st];
 }
-
-void merget_sort(int s, int e) {
-    if (e - s < 1)
-        return;
-    int m = s + (e - s) / 2;
-    // 재귀함수 형태로 구현
-    merget_sort(s, m);
-    merget_sort(m + 1, e);
-    for (int i = s; i <= e; i++) {
-        tmp[i] = A[i];
+void merge_sort(int st, int en){
+  if(en == st + 1) return;
+  if(en == st + 2){
+    if(a[st] > a[st+1]){
+      ans++;
+      swap(a[st], a[st+1]);
     }
-    int k = s;
-    int index1 = s;
-    int index2 = m + 1;
-    while (index1 <= m && index2 <= e) { // 두 그룹을 Merge 해주는 로직
-        if (tmp[index1] > tmp[index2]) {
-            A[k] = tmp[index2];
-            result = result + index2 - k; // 뒤쪽 데이터 값이 작아 선택되는 경우 결과 값 업데이트
-            k++;
-            index2++;
-        }
-        else {
-            A[k] = tmp[index1];
-            k++;
-            index1++;
-        }
-    }
-    // 한쪽 그룹이 모두 선택된 후 남아있는 값 정리하기
-    while (index1 <= m) {
-        A[k] = tmp[index1];
-        k++;
-        index1++;
-    }
-    while (index2 <= e) {
-        A[k] = tmp[index2];
-        k++;
-        index2++;
-    }
-
+    return;
+  }
+  int mid = (st + en) / 2;
+  merge_sort(st, mid);
+  merge_sort(mid, en);
+  merge(st, mid, en);
+}
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+  cin >> n;
+  for(int i = 0; i < n; i++) cin >> a[i];
+  merge_sort(0, n);
+  cout << ans;
 }
