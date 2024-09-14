@@ -1,31 +1,36 @@
-#include <iostream>
-#include <vector>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
+
 using namespace std;
+
+int n;
 vector<int> prime;
-int N;
+
+// 1부터 n까지의 소수를 구해줌 O(n)
 void eratos(int n){
-    vector<bool> res(n+1, true);
-    for(int i = 2; i*i <= n; i++){
-        if(!res[i]) continue;
-        for(int j = i * i; j <= n; j+= i) res[j] = false;
-    }
-    for(int i = 2; i <= n; i++) if(res[i]) prime.push_back(i);
+  vector<bool> isprime(n+1, 1);
+  for(int i = 2; i * i <= n; i++){
+    if(!isprime[i]) continue;
+    for(int j = i * i; j <= n; j += i) isprime[j] = 0;
+  }
+  for(int i = 2; i <= n; i++) if(isprime[i]) prime.push_back(i);
 }
+
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin >> N;
-    eratos(N);
-    prime.push_back(0);
-    int len = prime.size();
-    int tot = prime[0], ans = 0, en = 1;
-    for(int st = 0; st < len; st++){
-        while(en <= len && tot < N){
-            tot += prime[en++];
-        }
-        if(en == len+1) break;
-        if(tot == N) ans++;
-        tot -= prime[st];
-    }
-    cout << ans;
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
+  cin >> n;
+  eratos(n);
+
+  // solve, 투 포인터를 사용한다.
+  int ans{}, tot{}, en{};
+  for(int st = 0; st < prime.size(); st++){
+    while(en < prime.size() && tot < n) tot += prime[en++];
+    if(tot == n) ans++;
+    tot -= prime[st];
+  }
+
+  // output
+  cout << ans;
 }
