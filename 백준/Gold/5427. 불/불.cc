@@ -1,84 +1,79 @@
-#include <iostream>
-#include <queue>
-#include <utility>
-#define X first
-#define Y second
+// Authored by : chjh2129
+#include <bits/stdc++.h>
 
 using namespace std;
 
-char map[1001][1001];
-int Fdist[1001][1001];
-int Sdist[1001][1001];
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
-int w, h, t;
+using pi = pair<int,int>;
+#define X first
+#define Y second
+
+const int dx[4] = { 1, 0, -1, 0 };
+const int dy[4] = { 0, 1, 0, -1 };
+
+int n, m;
+string board[1001];
+int f_dist[1001][1001]; // 불
+int s_dist[1001][1001]; // 상근
+
+void solve(){
+  // init
+  memset(f_dist, -1, sizeof(f_dist));
+  memset(s_dist, -1, sizeof(s_dist));
+  queue<pi> fq;
+  queue<pi> sq;
+
+  // input
+  cin >> m >> n;
+  for(int i = 0; i < n; i++){
+    cin >> board[i];
+    for(int j = 0; j < m; j++){
+      if(board[i][j] == '@'){
+        sq.push({i, j});
+        s_dist[i][j] = 0;
+      }
+      if(board[i][j] == '*'){
+        fq.push({i, j});
+        f_dist[i][j] = 0;
+      }
+    }
+  }
+
+  // solve
+  while(!fq.empty()){
+    auto [cx, cy] = fq.front(); fq.pop();
+    for(int dir = 0; dir < 4; dir++){
+      int nx = cx + dx[dir];
+      int ny = cy + dy[dir];
+      if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+      if(board[nx][ny] == '#' || f_dist[nx][ny] >= 0) continue;
+      f_dist[nx][ny] = f_dist[cx][cy] + 1;
+      fq.push({nx, ny});
+    }
+  }
+
+  while(!sq.empty()){
+    auto [cx, cy] = sq.front(); sq.pop();
+    for(int dir = 0; dir < 4; dir++){
+      int nx = cx + dx[dir];
+      int ny = cy + dy[dir];
+      if(nx < 0 || nx >= n || ny < 0 || ny >= m){
+        cout << s_dist[cx][cy] + 1 << '\n';
+        return;
+      }
+      if(board[nx][ny] == '#' || s_dist[nx][ny] >= 0) continue;
+      if(f_dist[nx][ny] != -1 && f_dist[nx][ny] <= s_dist[cx][cy] + 1) continue;
+
+      s_dist[nx][ny] = s_dist[cx][cy] + 1;
+      sq.push({nx, ny});
+    }
+  }
+
+  cout << "IMPOSSIBLE\n";
+}
+
 int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	
-	cin >> t;
-	while(t--){
-		bool escape = false;
-		queue<pair<int,int>> FQ;
-		queue<pair<int,int>> Q;
-		cin >> w >> h;
-		for(int i = 0; i < h; i++){
-			fill(Fdist[i], Fdist[i]+w, 0);
-			fill(Sdist[i], Sdist[i]+w, 0);
-		}
-		
-		for(int i = 0; i < h; i++){
-			for(int j = 0; j < w; j++){
-				char c;
-				cin >> c;
-				if( c == '#') map[i][j] = c;
-				else{
-					if( c == '@' ) {
-						Q.push({i,j});
-						Sdist[i][j] = 1;
-					}
-					if( c == '*' ){
-						FQ.push({i,j});
-						Fdist[i][j] = 1;
-					}
-					map[i][j] = c;
-				}		
-			}
-		}
-		while(!FQ.empty()){
-			pair<int,int> cur = FQ.front(); FQ.pop();
-			for(int dir = 0; dir < 4; dir++ ){
-				int nx = cur.X + dx[dir];
-				int ny = cur.Y + dy[dir];
-				if( nx < 0 || nx >= h || ny < 0 || ny >= w ) continue;
-				if( map[nx][ny] == '#' ) continue;
-				if(Fdist[nx][ny]) continue;
-				
-				Fdist[nx][ny] = Fdist[cur.X][cur.Y] + 1;
-				FQ.push({nx,ny});
-			}
-		}
-		
-		while(!Q.empty() && (!escape)){
-			pair<int,int> cur = Q.front(); Q.pop();
-			for(int dir = 0; dir < 4; dir++){
-				int nx = cur.X + dx[dir];
-				int ny = cur.Y + dy[dir];
-				if( nx < 0 || nx >= h || ny < 0 || ny >= w ){
-						cout << Sdist[cur.X][cur.Y] << '\n';
-						escape = true;
-						break;
-				}
-				
-				if(map[nx][ny] == '#') continue;
-				if(Sdist[nx][ny]) continue;
-				if(Fdist[nx][ny] != 0 && Fdist[nx][ny] <= Sdist[cur.X][cur.Y] + 1) continue;
-				Sdist[nx][ny] = Sdist[cur.X][cur.Y] + 1;
-				Q.push({nx,ny});
-			}
-		}
-		
-		if(!escape) cout << "IMPOSSIBLE" << '\n';
-	}
+  cin.tie(nullptr)->sync_with_stdio(false);
+  int t;
+  cin >> t;
+  while(t--) solve();
 }
