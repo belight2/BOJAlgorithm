@@ -1,58 +1,70 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
+
 using namespace std;
-const char nl = '\n';
-int n, m, s, p;
-int adj[52][52];
-vector<bool> pos(52, 1);
-vector<int> party[52];
-vector<int> truth;
-void bfs(int x){
+
+int n, m, t;
+vector<int> adj[55]; 
+vector<int> party[55];
+bool truth[55];
+
+void bfs(){
   queue<int> q;
-  q.push(x);
-  pos[x] = 0;
-  while(!q.empty()){
+  // truth 배열을 방문 배열로 사용
+  for(int i = 1; i <= n; i++){
+    if(truth[i]) q.push(i);
+  }
+
+  while(q.size()){
     auto cur = q.front(); q.pop();
-    for(int nxt = 1; nxt <= n; nxt++){
-      if(adj[cur][nxt] == 0 || !pos[nxt]) continue;
+    for(auto nxt : adj[cur]){
+      if(truth[nxt]) continue;
+      truth[nxt] = 1;
       q.push(nxt);
-      pos[nxt] = 0;
     }
   }
 }
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-  cin >> n >> m >> s;
-  while(s--){
-    cin >> p;
-    truth.push_back(p);
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
+  cin >> n >> m >> t;
+  
+  // 진실을 아는 사람 입력
+  while(t--){
+    int x;
+    cin >> x;
+    truth[x] = 1;
   }
+
+  // 파티에 참석하는 인원 입력
   for(int i = 0; i < m; i++){
-    cin >> s;
-    while(s--){
-      cin >> p;
-      party[i].push_back(p);
-    }
-    s = party[i].size();
-    for(int j = 0; j < s-1; j++){
-      for(int k = j+1; k < s; k++){
-        adj[party[i][j]][party[i][k]] = 1;
-        adj[party[i][k]][party[i][j]] = 1;
-      }
+    int cnt;
+    cin >> cnt;
+
+    int prv, cur;
+    cin >> prv;
+    party[i].push_back(prv);
+
+    while(cnt-- > 1){
+      cin >> cur;
+      party[i].push_back(cur);
+      adj[prv].push_back(cur);
+      adj[cur].push_back(prv);
     }
   }
-  for(int x : truth) bfs(x);
-  int ans = 0;
+
+  // solve
+  bfs();
+
+  int ans{};
   for(int i = 0; i < m; i++){
-    bool flag = true;
-    for(int x : party[i]){
-      if(pos[x]) continue;
-      flag = false;
-      break;
-    }
-    if(flag) ans++;
+    bool isknown{};
+    for(int p : party[i]) if(truth[p]) isknown = 1;
+    if(!isknown) ans++;
   }
+
+  // output
   cout << ans;
 }
