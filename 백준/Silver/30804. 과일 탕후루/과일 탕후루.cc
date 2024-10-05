@@ -34,8 +34,7 @@ int main() {
   int ans{}, en{};
   for(int st = 0; st < n; st++){
     while(en < n && chk()) f[a[en++]]++;
-    if(chk()) ans = max(ans, en-st);
-    else ans = max(ans, en-st-1);
+    ans = max(ans, (chk() ? en-st : en-st-1));
     f[a[st]]--;
   }
   cout << ans;
