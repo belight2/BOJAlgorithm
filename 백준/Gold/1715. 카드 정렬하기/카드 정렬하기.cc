@@ -1,26 +1,29 @@
-#include <iostream>
-#include <queue>
-#include <functional>
-#include <vector>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
 using namespace std;
-const char nl = '\n';
+
+int n, x;
 priority_queue<int, vector<int>, greater<int>> pq;
-int N;
-int x;
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-  int ans = 0;
-  cin >> N;
-  while(N--){
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
+  cin >> n;
+  while(n--){
     cin >> x;
     pq.push(x);
   }
+
+  // solve
+  int ans{};
   while(pq.size() > 1){
     int a = pq.top(); pq.pop();
     int b = pq.top(); pq.pop();
     ans += a + b;
     pq.push(a+b);
   }
+
+  // output
   cout << ans;
 }
