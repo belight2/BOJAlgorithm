@@ -1,47 +1,33 @@
-// Do it! C++ 코딩 테스트 예제 코드(AC 받는지 확인 차 제출)
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+using ll = long long;
 
-    int N;
-    cin >> N;
-    vector<int> A(N, 0);
-    for (int i = 0; i < N; i++) {
-        cin >> A[i];
+int n;
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  cin >> n;
+  vector<ll> a(n);
+
+  for(auto &num : a) cin >> num;
+
+  sort(a.begin(), a.end());
+
+  int ans{};
+
+  for(int i = 0; i < n; i++){
+    ll m = a[i];
+    bool is_good_num{};
+
+    int en = n-1;
+    for(int st = 0; ; st++){
+      while(st < en && (en == i || a[st] + a[en] > m)) en--;
+      if(st >= en) break;
+      if(a[st]+a[en] == m && st != i) is_good_num = 1;
     }
-    sort(A.begin(), A.end());
-    int Result = 0;
-    for (int k = 0; k < N; k++) {
-        long find = A[k];
-        int i = 0;
-        int j = N - 1;
-        while (i < j) {  // 투포인터 알고리즘 
-            if (A[i] + A[j] == find) {  // 서로 다른 두 수의 합인지 체크
-                if (i != k && j != k) {
-                    Result++;
-                    break;
-                }
-                else if (i == k) {
-                    i++;
-                }
-                else if (j == k) {
-                    j--;
-                }
-            }
-            else if (A[i] + A[j] < find) {
-                i++;
-            }
-            else {
-                j--;
-            }
-        }
-    }
-    cout << Result << "\n";
+    if(is_good_num) ans++;
+  }
+  cout << ans;
 }
