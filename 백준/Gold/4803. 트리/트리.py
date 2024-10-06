@@ -54,4 +54,4 @@ def solve(N: int, M: int, testCase: int) -> None:
   else:
     print(f"A forest of {treeCount} trees.")
 
-main()
+sys.exit(main())
