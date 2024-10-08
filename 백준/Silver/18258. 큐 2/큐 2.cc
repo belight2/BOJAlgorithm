@@ -1,48 +1,53 @@
-#include <iostream>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int dat[2000100];
-int head = 0, tail = 0;
-
-void push(int x){
-	dat[tail++] = x;
-}
-void pop(){
-	if( tail > head ) cout << dat[head++] << '\n';
-	else cout << -1 << '\n';
-}
-int size(){
-	return tail - head;
-}
-int empty(){
-	if( head == tail ) return 1;
-	return 0;
-}
-int front(){
-	if(empty()) return -1;
-	return dat[head];
-}
-int back(){
-	if(empty()) return -1;
-	return dat[tail-1];
-}
 int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int t, elem;
-	string s;
-	cin >> t;
-	while(t--){
-		cin >> s;
-		if( s == "push"){
-			cin >> elem;
-			push(elem);
-		}
-		else if( s == "front") cout << front() << '\n';
-		else if( s == "back" ) cout << back() << '\n';
-		else if( s == "size" ) cout << size() << '\n';
-		else if( s == "empty" ) cout << empty() << '\n';
-		else if( s == "pop") pop();
-	}
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  int n; // 명령어 개수
+  int head = 0; // 큐에 앞부분의 index
+  vector<int> v; // 큐로 사용할 벡터
+  // 큐는 v[head] ~ v[v.size() - 1]까지를 원소로 가짐
+
+  cin >> n; //입력
+  while(n--){
+    string command;
+    cin >> command; //명령어 입력
+
+    // push 명령어 수행
+    if(command == "push"){
+      int x;
+      cin >> x;
+      v.push_back(x);
+    }
+    // pop 명령어 수행
+    else if(command == "pop"){
+      if(head == v.size()) cout << -1 << '\n';
+      else{
+        cout << v[head] << '\n';
+        head++;
+      } 
+    }
+    // size 명령어 수행
+    else if(command == "size"){
+      cout << v.size() - head << '\n';
+    }
+    // empty 명령어 수행
+    else if(command == "empty"){
+      if(head == v.size()) cout << 1 << '\n';
+      else cout << 0 << '\n';
+    }
+    // front 명령어 수행
+    else if(command == "front"){
+      if(head == v.size()) cout << -1 << '\n';
+      else cout << v[head] << '\n';
+    }
+    // back 명령어 수행
+    else if(command == "back"){
+      if(head == v.size()) cout << -1 << '\n';
+      else cout << v[v.size() -1] << '\n';
+    }
+  }
 }
