@@ -25,7 +25,7 @@ bool isprime(ll x){
 void solve(ll cur, int k){
   // base condition
   if(k == n){
-    if(isprime(cur)) cout << cur << nl;
+    cout << cur << nl; 
     return;
   }
 
