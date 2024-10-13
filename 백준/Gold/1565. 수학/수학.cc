@@ -31,7 +31,7 @@ int main() {
 
   // solve
   // 최대 공약수의 약수를 구한다.
-  vl divisor;
+  vi divisor;
   for(ll i = 1; i * i <= g; i++){
     if(g%i) continue;
     int t = g / i;
