@@ -1,21 +1,14 @@
+// Authored by : chjh2129
 #include <bits/stdc++.h>
+/*
+  라운드마다 주어지는 두 점의 번호를 merge하여 같은 집합에 속하게 합니다.
+
+  이미 같은 집합 속한 두 점에 선분을 긋는다면 사이클이 생겼다고 판단할 수 있습니다.
+*/
 using namespace std;
-typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
-typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
-typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
-typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
-typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
-#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
-#define X first
-#define Y second
-#define pb push_back
-#define sz(x) (int((x).size()))
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-const char nl = '\n';
 
 int n, m;
-vi p(500'005, -1);
+vector<int> p(500'005, -1);
 
 int find(int x){ return (p[x] < 0 ? x : p[x] = find(p[x])); }
 
@@ -29,14 +22,14 @@ bool merge(int x, int y){
   return 1;
 }
 
-int main() {
-  fastio(nullptr, false);
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
 
   // input
   cin >> n >> m;
-  
+
   // solve
-  int ans = 0x3f3f3f3f;
+  int ans = 0;
   for(int round = 1; round <= m; round++){
     int u, v;
     cin >> u >> v;
@@ -47,5 +40,5 @@ int main() {
   }
 
   // output
-  cout << (ans == 0x3f3f3f3f ? 0 : ans);
+  cout << ans;
 }
