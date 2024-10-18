@@ -16,7 +16,7 @@ const char nl = '\n';
 
 int n;
 string str;
-map<char, int> chk; // 확인용
+unordered_map<char, int> chk; // 확인용
 
 void solve(){
   // init
