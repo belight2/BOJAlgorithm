@@ -1,47 +1,51 @@
-#include <iostream>
-#include <tuple>
-#include <vector>
-#include <algorithm>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
+
 using namespace std;
-const char nl = '\n';
+
+using ti = tuple<int,int,int>;
+
 int n;
-vector<tuple<int,int,int>> edge;
-vector<int> p(1005, -1);
-int find(int x){
-  if(p[x] < 0) return x;
-  return p[x] = find(p[x]);
+vector<ti> edge; // 간선 정보
+vector<int> p(1005, -1); // 부모 정보
+
+int find(int x){ return (p[x] < 0 ? x : p[x] = find(p[x])); }
+
+bool merge(int x, int y){
+  x = find(x);
+  y = find(y);
+  if(x == y) return 0; // 유니온 실패
+  if(p[x] == p[y]) --p[x];
+  if(p[x] > p[y]) swap(x, y);
+  p[y] = x;
+  return 1; // 유니온 성공
 }
-bool merge(int u, int v){
-  u = find(u);
-  v = find(v);
-  if(u == v) return 0;
-  if(p[u] == p[v]) p[u]--;
-  if(p[u] < p[v]) p[v] = u;
-  else p[u] = v;
-  return 1;
-}
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
   cin >> n;
-  int cost;
   for(int i = 1; i <= n; i++){
+    int cost;
     for(int j = 1; j <= n; j++){
       cin >> cost;
       if(i >= j) continue;
       edge.push_back({cost, i, j});
     }
   }
+
+  // solve
+  int cnt{};
+  long long ans{};
   sort(edge.begin(), edge.end());
-  int cnt = 0;
-  long long ans = 0;
-  for(auto cur : edge){
-    int cost, u, v;
-    tie(cost, u, v) = cur;
-    if(!merge(u,v)) continue;
+  for(auto &[cost, u, v] : edge){
+    if(!merge(u, v)) continue; // 유니온 실패 시 넘어감
     cnt++;
     ans += cost;
-    if(cnt == n - 1) break;
+    if(cnt == n-1) break; // 간선을 n-1개 선택했으면 루프를 종료
   }
+
+  // output
   cout << ans;
 }
