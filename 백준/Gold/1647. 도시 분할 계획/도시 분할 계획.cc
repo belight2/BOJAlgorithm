@@ -1,44 +1,48 @@
-#include <iostream>
-#include <vector>
-#include <tuple>
-#include <algorithm>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
+
 using namespace std;
-const char nl = '\n';
-vector<int> p(100005, -1);
-vector<tuple<int,int,int>> edge;
+
+using ti = tuple<int,int,int>;
+
 int n, m;
-int a, b, c;
-int find(int x){
-  if(p[x] < 0 ) return x;
-  return p[x] = find(p[x]);
-}
-bool merge(int u, int v){
-  u = find(u);
-  v = find(v);
-  if(u == v) return 0;
-  if(p[u] == p[v]) p[u]--;
-  if(p[u] < p[v]) p[v] = u;
-  else p[u] = v;
+vector<ti> edge;
+vector<int> p(100005, -1);
+
+int find(int x){ return (p[x] < 0 ? x : p[x] = find(p[x])); }
+
+bool merge(int x, int y){
+  x = find(x);
+  y = find(y);
+  if(x == y) return 0;
+  if(p[x] == p[y]) p[x]--;
+  if(p[x] > p[y]) swap(x, y);
+  p[y] = x;
   return 1;
 }
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
   cin >> n >> m;
   while(m--){
-    cin >> a >> b >> c;
-    edge.push_back({c,a,b});
+    int u, v, c;
+    cin >> u >> v >> c;
+    edge.push_back({c, u, v});
   }
+
+  // solve
   sort(edge.begin(), edge.end());
-  int town = n;
-  int ans = 0;
-  for(auto cur : edge){
-    if(town == 2) break;
-    int cost, a, b;
-    tie(cost, a, b) = cur;
-    if(!merge(a, b)) continue;
+  int town = n; // 현재 분리된 마을의 개수
+  int ans{}; // 유지비의 최솟값
+  for(auto &[cost, u, v] : edge){
+    if(town == 2) break; // 분리된 마을이 2개면 패스
+    if(!merge(u, v)) continue;
     town--;
     ans += cost;
   }
+
+  // output
   cout << ans;
 }
