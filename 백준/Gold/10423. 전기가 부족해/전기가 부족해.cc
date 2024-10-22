@@ -1,47 +1,57 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <tuple>
+// Authored by : chjh2129
+#include <bits/stdc++.h>
+/*
+  발전소가 설치된 도시들은 서로 떨어져있지만 케이블로 연결될 필요도 없습니다.
+
+  따라서 가상의 정점 0번을 두고 발전소가 설치된 도시들을 0번 도시가 가중치가 0인 케이블이 있다고 가정합니다.
+
+  이를 인접리스트에 추가한다음 n+1개의 정점을 가진 그래프에서 최소 신장 트리를 구하면 됩니다.
+*/
 using namespace std;
-const char nl = '\n';
-int N, M, K, u, v, w;
-int c;
-vector<int> p(1005, -1);
-vector<tuple<int, int, int>> cable;
-int find(int x){
-  if(p[x] < 0) return x;
-  return p[x] = find(p[x]);
-}
-bool merge(int x, int y){
-  x = find(x);
-  y = find(y);
-  if(x == y) return 0;
-  if(p[x] < p[y]) p[y] = x;
-  else p[x] = y;
-  return 1;
-}
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-  cin >> N >> M >> K;
-  vector<int> k(K);
-  int cnt = 0, ans = 0;
-  cin >> k[0];
-  for(int i = 1; i < K; i++){
-    cin >> k[i];
-    if(merge(k[0], k[i])) cnt++;
+using ti = tuple<int, int, int>;
+using pi = pair<int, int>;
+
+int n, m, k;
+vector<pi> adj[1005];
+vector<bool> chk(1005);
+priority_queue<ti, vector<ti>, greater<ti>> pq;
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
+  cin >> n >> m >> k;
+  
+  while(k--){
+    int x; cin >> x;
+    adj[0].push_back({0, x});
+    adj[x].push_back({0, 0});
   }
-  while(M--){
-    cin >> u >> v >> w;
-    cable.push_back({w, u, v});
+
+  while(m--){
+    int u, v, cost;
+    cin >> u >> v >> cost;
+    adj[u].push_back({cost, v});
+    adj[v].push_back({cost, u});
   }
-  sort(cable.begin(), cable.end());
-  for(auto cur : cable){
-    if(cnt == N - 1) break;
-    tie(w, u, v) = cur;
-    if(!merge(u, v)) continue;
-    ans += w;
-    cnt ++;
+
+  // solve
+  chk[0] = 1;
+  for(auto &[cost, nxt] : adj[0]) pq.push({cost, 0, nxt});
+
+  int cnt{}, ans{};
+  while(cnt < n){
+    auto [cost, prv, cur] = pq.top(); pq.pop();
+    if(chk[cur]) continue;
+    chk[cur] = 1;
+    ans += cost;
+    cnt++;
+    for(auto &[cost, nxt] : adj[cur]){
+      if(chk[nxt]) continue;
+      pq.push({cost, cur, nxt});
+    }
   }
+
+  // output
   cout << ans;
 }
