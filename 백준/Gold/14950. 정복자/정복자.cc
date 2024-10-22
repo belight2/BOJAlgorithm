@@ -1,55 +1,58 @@
+// Authored by : chjh2129
 #include <bits/stdc++.h>
+/*
+  무방향 가중치 연결 그래프입니다.
+
+  정복할 때마다 t만큼 모든 도로의 비용이 증가하지만
+
+  모든 도시를 정복해야 하므로 추가되는 비용은 정점의 개수에 비례하게 증가합니다.
+
+  따라서 MST가 되는 간선들의 가중치의 합과 정점의 개수에 맞추어 추가 비용을 더해주시면 됩니다.
+*/
 using namespace std;
-typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
-typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
-typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
-typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
-typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
-#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
-#define X first
-#define Y second
-#define pb push_back
-#define sz(x) (int((x).size()))
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-const char nl = '\n';
 
-int n, m, t, u, v, w;
-vti edges;
+using ti = tuple<int,int,int>;
 
-// disjoint-set
-vi p(10005, -1);
+int n, m, t;
+vector<ti> edges;
+vector<int> p(10005, -1);
 
-int find(int x){
-  return (p[x] < 0 ? x : p[x] = find(p[x]));
-}
+int find(int x){ return (p[x] < 0 ? x : p[x] = find(p[x])); }
 
-void merge(int x, int y){
+bool merge(int x, int y){
   x = find(x);
   y = find(y);
-  if(x == y) return;
+  if(x == y) return 0;
   if(p[x] == p[y]) p[x]--;
-  if(p[x] < p[y]) p[y] = x;
-  else p[x] = y;
+  if(p[x] > p[y]) swap(x, y);
+  p[y] = x;
+  return 1;
 }
 
-int main() {
-  fastio(nullptr, false);
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input
   cin >> n >> m >> t;
   while(m--){
+    int u, v, w;
     cin >> u >> v >> w;
-    edges.pb({w, u, v});
+    edges.push_back({w, u, v});
   }
-  sort(all(edges));
-  ll ans{}, cnt{};
-  for(auto &cur : edges){
-    auto &[c, a, b] = cur;
-    if(find(a) == find(b)) continue;
-    merge(a, b);
+
+  // solve
+  long long ans{}, cnt{};
+  sort(edges.begin(), edges.end());
+  for(auto &[cost, u, v] : edges){
+    if(!merge(u, v)) continue;
     cnt++;
-    ans += c;
-    if(cnt == n-1) break;
+    ans += cost;
+    if(cnt == n - 1) break;
   }
-  cnt = (n < 3 ? 1 : (n-2) * (n-1) / 2);
-  cout << ans + cnt * t; 
+
+  // cnt값 조정
+  cnt = (n-2) * (n-1) / 2;
+  
+  // output
+  cout << ans + cnt * t;
 }
