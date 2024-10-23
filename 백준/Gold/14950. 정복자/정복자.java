@@ -12,23 +12,9 @@ import java.util.*;
 public class Main {
 
   public static int n, m, t;
-  public static ArrayList<int[]> edge = new ArrayList<>();
-  public static int[] p;
-
-  public static int find(int x){
-    if(p[x] < 0) return x;
-    return p[x] = find(p[x]);
-  }
-
-  public static boolean union(int x, int y){
-    x = find(x);
-    y = find(y);
-    if(x == y) return false;
-    if(p[x] == p[y]) p[x]--;
-    if(p[x] > p[y]) p[x] = y;
-    else p[y] = x;
-    return true;
-  }
+  public static ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+  public static boolean[] chk;
+  public static PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(e -> e[0]));
 
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -39,29 +25,38 @@ public class Main {
     m = Integer.parseInt(st.nextToken());
     t = Integer.parseInt(st.nextToken());
     
-    p = new int[n+1];
-    for(int i = 0; i <= n; i++) p[i] = -1;
-
+    for(int i = 0; i <= n; i++) adj.add(new ArrayList<>());
+    chk = new boolean[n+1];
+    
     while(m-- > 0){
       st = new StringTokenizer(br.readLine());
       int u = Integer.parseInt(st.nextToken());
       int v = Integer.parseInt(st.nextToken());
       int w = Integer.parseInt(st.nextToken());
-      edge.add(new int[]{w, u, v});
+      adj.get(u).add(new int[]{w, v});
+      adj.get(v).add(new int[]{w, u});
     }
 
     // solve
+    chk[1] = true;
+    for(int[] nxt : adj.get(1)) pq.add(new int[]{nxt[0], 1, nxt[1]});
+
     long ans = 0, cnt = 0;
-    edge.sort(Comparator.comparingInt(e -> e[0]));
-    for(int[] cur : edge){
-      if(!union(cur[1], cur[2])) continue;
+    while(cnt < n - 1){
+      int[] cur = pq.poll();
+      if(chk[cur[2]]) continue;
+      chk[cur[2]] = true;
       ans += cur[0];
       cnt++;
-      if(cnt == n - 1) break;
+      
+      for(int[] nxt : adj.get(cur[2])){
+        if(chk[nxt[1]]) continue;
+        pq.add(new int[]{nxt[0], cur[2], nxt[1]});
+      }
     }
 
     // cnt값 조정
-    cnt = (n - 1) * (n - 2) / 2;
+    cnt = (n-1) * (n-2) / 2;
 
     // output
     System.out.println(ans + cnt * t);
