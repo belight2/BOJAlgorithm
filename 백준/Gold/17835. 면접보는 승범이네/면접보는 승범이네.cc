@@ -1,49 +1,65 @@
+// Authored by : chjh2129
 #include <bits/stdc++.h>
 #define X first
 #define Y second
-#define pb push_back
-#define ll long long
+/*
+  각 도시에서 면접장으로 가는 거리를 구하면 TLE,
+
+  반대로 면접장에서 각 도시로 가는 거리를 구하는 방법을 채택
+
+  간선 정보의 방향을 거꾸로 저장한 다음, 면접장이 배치된 도시를 우선순위 큐에 모두 넣고 다익스트라 진행
+*/
 using namespace std;
-using pi = pair<ll,int>;
-using ti = tuple<ll,int,int>;
-const char nl = '\n';
-const ll INF = 1e10+10;
-int n, m, k, u, v;
-ll c;
-vector<pi> adj[100005];
+
+using ll = long long;
+using pi = pair<ll, int>;
+
+const ll INF = 1e10 + 10;
+
+int n, m, k;
 ll d[100'005];
-vector<int> dest;
+vector<pi> adj[100'005];
+priority_queue<pi, vector<pi>, greater<pi>> pq;
+
 void dijkstra(){
-  priority_queue<pi, vector<pi>, greater<pi>> pq;
-  for(int cur : dest){
-    d[cur] = 0;
-    pq.push({0, cur});
-  }
   while(!pq.empty()){
-    auto cur = pq.top(); pq.pop();
-    if(d[cur.Y] != cur.X) continue;
-    for(auto nxt : adj[cur.Y]){
-      if(d[nxt.Y] <= d[cur.Y] + nxt.X) continue;
-      d[nxt.Y] = d[cur.Y] + nxt.X;
-      pq.push({d[nxt.Y], nxt.Y});
+    auto [cw, cx] = pq.top(); pq.pop();
+
+    if(d[cx] != cw) continue;
+
+    for(auto [nw, nx] : adj[cx]){
+      if(d[nx] <= d[cx] + nw) continue;
+      d[nx] = d[cx] + nw;
+      pq.push({d[nx], nx});
     }
   }
 }
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
+
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
+
+  // input & init
   cin >> n >> m >> k;
+  
+  int u, v;
+  ll w;
   while(m--){
-    cin >> u >> v >> c;
-    adj[v].pb({c, u});
+    cin >> u >> v >> w;
+    adj[v].push_back({w, u});
   }
-  fill(d, d+n+1, INF);
+
+  fill(d, d + n + 1, INF);
+
   while(k--){
-    cin >> u;
-    dest.pb(u);
+    int x; cin >> x;
+    d[x] = 0;
+    pq.push({d[x], x});
   }
+
+  // solve
   dijkstra();
-  ll ans = *max_element(d+1, d+n+1);
-  for(int i = 1; i <= n; i++) if(d[i] == ans) {cout << i << nl; break;}
-  cout << ans;
+
+  // output
+  ll aidx = max_element(d + 1, d + n + 1) - d;
+  cout << aidx << '\n' << d[aidx];
 }
