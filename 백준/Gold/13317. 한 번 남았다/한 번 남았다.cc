@@ -1,11 +1,7 @@
-#include <cstdio>
+#include <stdio.h>
 
 int main(){
-  int n = 50, m = 49;
-  printf("%d %d\n", n, m);
-
-  int t1 = 49, t2 = 50, t3 = -1;
-  while(m--){
-    printf("%d %d %d\n", t1--, t2--, t3);
-  }
+  puts("50 49");
+  for(int i = 50; i >= 2; i--)
+    printf("%d %d -1\n", i-1, i);
 }
