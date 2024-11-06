@@ -3,11 +3,7 @@
 using namespace std;
 
 long long solution(long long n) {
-    string ans{};
-    while(n){
-        ans.push_back('0' + n % 10);
-        n /= 10;
-    }
+    string ans = to_string(n);
     sort(ans.rbegin(), ans.rend());
     return stoll(ans);
 }
