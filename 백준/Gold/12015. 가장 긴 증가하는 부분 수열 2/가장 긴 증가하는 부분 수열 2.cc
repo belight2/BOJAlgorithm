@@ -1,53 +1,53 @@
+// Authored by : chjh2129
 #include <bits/stdc++.h>
+/*
+  증가하는 부분 수열은 오름차순으로 정렬되어 있습니다.
+
+  이러한 특성을 이용하여 이분 탐색(lower_bound)으로 문제를 풀이할 수 있습니다.
+
+  수열을 순회하면서 각 값이 LIS에서 어디에 위치할 수 있는지 lower_bound로 검사합니다.
+
+  idx = lower_bound(lis.begin(), lis.end(), a[i]) - lis.begin();
+
+  위와 연산은 다음을 의미합니다.
+  
+  i) lis에서 a[i]가 있다.
+  
+      1. lis[idx] = a[i]인 idx값을 가집니다.
+
+  ii) lis에서 a[i]가 없다.
+
+      2. a[i]보다 큰 값 중 가장 작은 값의 위치 값을 가집니다. (lis[idx] > a[i])
+
+      3. a[i]보다 큰 값이 없다면 idx는 lis.size()의 값을 가집니다.
+
+  1번과 2번의 경우 lis[idx] = a[i]로 갱신합니다.
+
+  3번인 경우 : lis.push_back(a[i])를 수행합니다.
+
+  순회가 끝나면 lis의 크기는 LIS의 길이 정보를 가집니다.
+*/
 using namespace std;
-typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
-typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
-typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
-typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
-typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
-#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
-#define X first
-#define Y second
-#define pb push_back
-#define sz(x) (int((x).size()))
-#define all(x) (x).begin(), (x).end()
-#define rall(x) (x).rbegin(), (x).rend()
-const char nl = '\n';
 
 int n;
-int tree[2'000'005];
-pi a[1'000'005];
+int a[1'000'005];
+vector<int> lis;
 
-int mxq(int l, int r){
-  int ret{};
-  for(l += n, r += n; l < r; l>>=1, r>>=1){
-    if(l&1) ret = max(ret, tree[l++]);
-    if(r&1) ret = max(ret, tree[--r]);
-  }
-  return ret;
-}
+int main(){
+  cin.tie(nullptr)->sync_with_stdio(false);
 
-void update(int p, int val){
-  p += n;
-  tree[p] = val;
-  for(int i = p; i > 1; i >>= 1) tree[i>>1] = max(tree[i], tree[i^1]);
-}
-
-bool cmp(const pi &a, const pi &b){
-  if(a.X == b.X) return a.Y > b.Y;
-  return a.X < b.X;
-}
-int main() {
-  fastio(nullptr, false);
+  // input
   cin >> n;
+  for(int i = 0; i < n; i++) cin >> a[i];
+
+  // solve
   for(int i = 0; i < n; i++){
-    cin >> a[i].X;
-    a[i].Y = i;
+    int idx = lower_bound(lis.begin(), lis.end(), a[i]) - lis.begin();
+
+    if(idx == lis.size()) lis.push_back(a[i]);
+    else lis[idx] = a[i];
   }
-  sort(a, a+n, cmp);
-  for(int i = 0; i < n; i++){
-    int mx = mxq(0, a[i].Y) + 1;
-    update(a[i].Y, mx);
-  }
-  cout << tree[1];
+
+  // output
+  cout << lis.size();
 }
