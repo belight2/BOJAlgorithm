@@ -14,15 +14,18 @@ typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef que
 #define rall(x) (x).rbegin(), (x).rend()
 const char nl = '\n';
 
-int CCW(pi a, pi b, pi c){
-  int ans = (a.X * b.Y + b.X * c.Y + c.X * a.Y) - (a.X * c.Y + c.X * b.Y + b.X * a.Y);
-  if(ans == 0) return 0;
-  return (ans > 0) ? 1 : -1;
+pi a, b, c;
+
+int ccw() {
+    int res = a.X * b.Y + b.X * c.Y + c.X * a.Y;
+    res -= b.X * a.Y + a.X * c.Y + c.X * b.Y;
+    if(!res) return 0;
+    return (res < 0 ? -1 : 1);
 }
 
 int main() {
-  fastio(nullptr, false);
-  vpi p(3);
-  for(auto &cur : p) cin >> cur.X >> cur.Y;
-  cout << CCW(p[0], p[1], p[2]);
+    fastio(nullptr, false);
+
+    cin >> a.X >> a.Y >> b.X >> b.Y >> c.X >> c.Y;
+    cout << ccw();
 }
