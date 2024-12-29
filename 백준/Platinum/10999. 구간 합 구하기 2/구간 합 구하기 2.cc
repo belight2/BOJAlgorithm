@@ -15,102 +15,100 @@ typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef que
 const char nl = '\n';
 
 template<typename T>
-class LazySegmentTree{
-  private:
-    const int n;
-    T *tree, *lazy, *len;
+class LazySegmentTree {
+    private:
+        const int n;
+        T *tree, *lazy, *len;
 
-    void printDebug(){
-      for(int i = 1; i < 2 * n; i++){
-        cout << tree[i] << ' ';
-      }
-      cout << nl;
-    }
-
-    void init(vector<T> &a){
-      for(int i = 0; i < n; i++){
-        len[i + n] = 1;
-        tree[i + n] = a[i];
-      }
-      for(int i = n - 1; i > 0; i--){
-        len[i] = len[i << 1] << 1;
-        tree[i] = tree[i << 1] + tree[i << 1 | 1];
-      }
-    }
-
-    void apply(int p, T val){
-      assert(0 <= p && p < 2*n);
-      tree[p] += val * len[p];
-      if(p < n) lazy[p] += val;
-    }
-
-    void build(int p){
-      for(p >>= 1; p > 0; p >>= 1) assert(0 <= p && p < 2*n), tree[p] = tree[p << 1] + tree[p << 1 | 1] + lazy[p] * len[p];
-    }
-
-    void push(int p){
-      assert(0 < p && p <= 2 * n);
-      for(int h = __lg(p); h > 0; h--){
-        int cur = p >> h;
-        assert(0 <= cur && cur < 2*n);
-        if(lazy[cur] != 0){
-          apply(cur << 1, lazy[cur]);
-          apply(cur << 1 | 1, lazy[cur]);
-          lazy[cur] = 0;
+        void init(vector<T> &a) {
+            for(int i = 0; i < n; i++) {
+                len[n + i] = 1;
+                tree[n + i] = a[i];
+            }
+            for(int i = n - 1; i > 0; i--) {
+                len[i] = len[i << 1] << 1;
+                tree[i] = tree[i << 1] + tree[i << 1 | 1];
+            }
         }
-      }
-    }
 
-  public:
-    LazySegmentTree(vector<T> &a): n(a.size()) {
-      tree = new T[n << 1]();
-      lazy = new T[n << 1]();
-      len = new T[n << 1]();
-      init(a);
-    }
+        void apply(int p, T val) {
+            tree[p] += val * len[p];
+            if(p < n) lazy[p] += val;
+        }
 
-    void update(int l, int r, T val){
-      int l0 = (l += n);
-      int r0 = (r += n);
-      for(; l < r; l >>= 1, r >>= 1){
-        if(l&1) apply(l++, val);
-        if(r&1) apply(--r, val);
-      }
-      build(l0);
-      build(r0-1);
-    }
+        void build(int p) {
+            for(p >>= 1; p > 0; p >>= 1) {
+                tree[p] = tree[p << 1] + tree[p << 1 | 1] + lazy[p] * len[p];
+            }
+        }
 
-    T query(int l, int r){
-      T ret{};
-      push(l += n), push((r += n) - 1);
-      for(; l < r; l >>= 1, r >>= 1){
-        if(l&1) ret += tree[l++];
-        if(r&1) ret += tree[--r];
-      }
-      return ret;
-    }
+        void push(int p) {
+            for(int h = __lg(p); h > 0; h--) {
+                int cur = p >> h;
+                if(lazy[cur] != 0) {
+                    apply(cur << 1, lazy[cur]);
+                    apply(cur << 1 | 1, lazy[cur]);
+                    lazy[cur] = 0;
+                }
+            }
+        }
+
+    public:
+        LazySegmentTree(vector<T> &a) : n(a.size()) {
+            tree = new T[n << 1]();
+            lazy = new T[n << 1]();
+            len = new T[n << 1]();
+            init(a);
+        }
+
+        void update_point(int p, T val) {
+            for(tree[p += n] = val; p > 1; p >>= 1) {
+                tree[p >> 1] = tree[p] + tree[p ^ 1];
+            }
+        }
+
+        void update_range(int l, int r, T val) {
+            for(int L = l + n, R = r + n; L < R; L >>= 1, R >>= 1) {
+                if(L & 1) apply(L++, val);
+                if(R & 1) apply(--R, val);
+            }
+            build(l + n);
+            build(r + n - 1);
+        }
+
+        T query(int l, int r) {
+            T ret{};
+            push(l += n);
+            push((r += n) - 1);
+            for(; l < r; l >>= 1, r >>= 1) {
+                if(l & 1) ret += tree[l++];
+                if(r & 1) ret += tree[--r];
+            }
+            return ret;
+        }
 };
 
 int n, m, k;
 
 int main() {
-  fastio(nullptr, false);
+    fastio(nullptr, false);
 
-  cin >> n >> m >> k;
-  vl a(n);
-  for(auto &x : a) cin >> x;
+    cin >> n >> m >> k;
+    vl a(n);
+    for(auto &x : a) cin >> x;
 
-  LazySegmentTree<ll> LST(a);
+    LazySegmentTree<ll> lst(a);
 
-  while(m + k --){
-    ll a, b, c, d;
-    cin >> a >> b >> c;
-    if(a&1){
-      cin >> d;
-      LST.update(b-1, c, d);
+    while(m + k--) {
+        ll a, b, c, d;
+        cin >> a >> b >> c;
+
+        if(a & 1) {
+            cin >> d;
+            lst.update_range(b - 1, c, d);
+        }
+        else {
+            cout << lst.query(b - 1, c) << nl;
+        }
     }
-    else{
-      cout << LST.query(b-1, c) << nl;
-    }
-  }
 }
