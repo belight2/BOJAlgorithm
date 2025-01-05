@@ -16,24 +16,26 @@ const char nl = '\n';
 
 int n;
 vi students;
-int party[1005][1005];
-int d[1005][1005];
+int d[1005];
 
-int solve(int cx, int cy) {
-    if(cx == cy) {
+int solve(int cur) {
+    if(cur < 0) {
         return 0;
     }
 
-    if(d[cx][cy] != -1) {
-        return d[cx][cy];
+    if(d[cur] != -1) {
+        return d[cur];
     }
 
-    d[cx][cy] = 0;
-    for(int md = cx; md < cy; md++) {
-        d[cx][cy] = max(d[cx][cy], party[cx][md] + party[md + 1][cy]);
-        d[cx][cy] = max(d[cx][cy], solve(cx, md) + solve(md + 1, cy));
+    int mx, mn;
+    mx = mn = students[cur];
+    for(int md = cur; md >= 0; md--) {
+        mx = max(mx, students[md]);
+        mn = min(mn, students[md]);
+        d[cur] = max(d[cur], solve(md - 1) + mx - mn);
     }
-    return d[cx][cy];
+    
+    return d[cur];
 }
 
 int main() {
@@ -46,16 +48,7 @@ int main() {
         students.pb(score);        
     }    
 
-    for(int i = 0; i < n; i++) {
-        int mn{students[i]}, mx{students[i]};
-        for(int j = i + 1; j < n; j++) {
-            mn = min(mn, students[j]);
-            mx = max(mx, students[j]);
-            party[i][j] = max(party[i][j], mx - mn);    
-        }
-    }  
-
     memset(d, -1, sizeof(d));
 
-    cout << solve(0, n-1);
+    cout << solve(n - 1);
 }
