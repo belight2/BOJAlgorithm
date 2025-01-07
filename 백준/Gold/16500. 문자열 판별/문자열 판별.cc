@@ -76,10 +76,6 @@ int main() {
     for(int i = 0; i < n; i++) {
         getline(cin, a[i]);
         kmps.push_back(KMP(str, a[i]));
-        if(!kmps[i].is_exists()) {
-            cout << 0;
-            return 0;
-        }
     }
 
     for(int st = 0; st < sz(str); st++) {
