@@ -13,34 +13,64 @@ typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef que
 #define all(x) (x).begin(), (x).end()
 #define rall(x) (x).rbegin(), (x).rend()
 const char nl = '\n';
-vi pos;
-vi failure(const string &s){
-  vi f(sz(s));
-  int j{};
-  for(int i = 1; i < sz(s); i++){
-    while(j > 0 && s[i] != s[j]) j = f[j-1];
-    if(s[i] == s[j]) f[i] = ++j;
-  }
-  return f;
-}
-void kmp(const string &s, const string &p){
-  vi f = failure(p);
-  int j{};
-  for(int i = 0; i < sz(s); i++){
-    while(j > 0 && s[i] != p[j]) j = f[j-1];
-    if(s[i] == p[j]) j++;
-    if(j == sz(p)){
-      pos.pb(i-j+2);
-      j = f[j-1];
-    }
-  }
-}
+
+class KMP{
+    private:
+        const string src;
+        const string dst;
+        vi start_poses;
+        vi fail;
+
+        void construct_fail_function() {
+            int j{};
+            for(int i = 1; i < sz(dst); i++) {
+                while(j > 0 && dst[i] != dst[j]) j = fail[j - 1];
+                if(dst[i] == dst[j]) fail[i] = ++j;
+            }    
+        }
+
+        void find() {
+            int j{};
+            for(int i = 0; i < sz(src); i++) {
+                while(j > 0 && src[i] != dst[j]) j = fail[j - 1];
+                if(src[i] == dst[j]) j++;
+                if(j == sz(dst)) {
+                    start_poses.pb(i - j + 2);
+                    j = fail[j - 1];
+                }
+            }
+        }
+
+    public:
+        KMP(const string &src, const string &dst): src(src), dst(dst), fail(dst.size()) { 
+            construct_fail_function();
+            find();
+        }
+
+        bool is_exists() {
+            return !start_poses.empty();
+        }
+
+        size_t size() {
+            return start_poses.size();
+        }
+
+        int get(int idx) {
+            return start_poses[idx];
+        }
+};
+
+string t, p;
+
 int main() {
-  fastio(nullptr, false);
-  string t, p;
-  getline(cin, t);
-  getline(cin, p);
-  kmp(t, p);
-  cout << sz(pos) << nl;
-  for(int &cur : pos) cout << cur << ' ';
+    fastio(nullptr, false);
+    getline(cin, t);
+    getline(cin, p);
+
+    KMP kmps = KMP(t, p);
+
+    cout << kmps.size() << nl;
+    for(int i = 0; i < kmps.size(); i++) {
+        cout << kmps.get(i) << ' ';
+    }
 }
