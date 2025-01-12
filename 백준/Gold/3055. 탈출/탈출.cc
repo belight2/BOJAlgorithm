@@ -46,33 +46,29 @@ int main() {
             }
         }
     }
-    
-    while(sz(q)) {
-        auto [cx, cy] = q.front(); q.pop();
-        for(int dir = 0; dir < 4; dir++) {
-            int nx = cx + dx[dir];
-            int ny = cy + dy[dir];
-            if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-            if(board[nx][ny] != '.' || (d[nx][ny] != -1 && d[nx][ny] <= d[cx][cy] + 1)) continue;
-            d[nx][ny] = d[cx][cy] + 1;
-            q.push({nx, ny});
-        }
-    }
-    board[ex][ey] = '.';
+
     d[sx][sy] = 0;
     q.push({sx, sy});
     while(sz(q)) {
         auto [cx, cy] = q.front(); q.pop();
+        char status = board[cx][cy];
         for(int dir = 0; dir < 4; dir++) {
             int nx = cx + dx[dir];
             int ny = cy + dy[dir];
             if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
             if(board[nx][ny] == '*' || board[nx][ny] == 'X') continue;
-            if(board[nx][ny] == '.' && (d[nx][ny] == -1 || d[nx][ny] > d[cx][cy] + 1)) {
+            if(status == '*' && board[nx][ny] != 'D' && (d[nx][ny] == -1 || d[nx][ny] > d[cx][cy] + 1)) {
+                board[nx][ny] = status;
+                d[nx][ny] = d[cx][cy] + 1;
+                q.push({nx, ny});
+            }
+            else if(status == 'S' && (d[nx][ny] == -1 || d[nx][ny] > d[cx][cy] + 1)) {
+                board[nx][ny] = status;
                 d[nx][ny] = d[cx][cy] + 1;
                 q.push({nx, ny});
             }
         }
     }
+
     cout << (d[ex][ey] == -1 ? "KAKTUS" : to_string(d[ex][ey]));
 }
