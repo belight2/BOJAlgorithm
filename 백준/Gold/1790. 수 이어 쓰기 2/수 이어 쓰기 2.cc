@@ -28,11 +28,10 @@ int main() {
     int digit{1};
     ll tot{};
     for(ll offset = 9; digit <= 9; offset *= 10L, digit++) {
-        tot += offset * digit;
-        if(k <= tot) {
-            tot -= offset * digit;
+        if(k <= tot + offset * digit) {
             break;
         }
+        tot += offset * digit;
     }
 
     ll k_num{1};
