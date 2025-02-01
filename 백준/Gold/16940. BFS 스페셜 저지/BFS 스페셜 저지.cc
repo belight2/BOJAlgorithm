@@ -32,7 +32,6 @@ bool is_correct_path(int cur) {
     bool ans = 1;
     for(int i = st; i < en; i++) {
         if(!binary_search(all(adj[cur]), a[i])) {
-            st = en;
             return 0;
         }
         ans &= is_correct_path(a[i]);
@@ -52,10 +51,9 @@ int main() {
         adj[u].pb(v);
         adj[v].pb(u);
     }
-    for(int i = 0; i < n; i++) cin >> a[i];
-
-    for(int i = 1; i <= n; i++) {
-        sort(all(adj[i]));
+    for(int i = 0; i < n; i++) {
+        cin >> a[i]; 
+        sort(all(adj[i + 1]));
     }
 
     qi q;
