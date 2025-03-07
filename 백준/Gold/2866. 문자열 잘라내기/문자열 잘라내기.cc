@@ -17,37 +17,33 @@ const char nl = '\n';
 int n, m;
 vs board;
 
+bool solve(int count) {
+    set<string> chk;
+    for(int j = 0; j < m; j++) {
+        string str{};
+        for(int i = count; i < n; i++) {
+            str.pb(board[i][j]);
+        }
+        chk.insert(str);
+    }
+
+    return sz(chk) == m;
+}
+
 int main() {
     fastio(nullptr, false);
 
     cin >> n >> m;
-
-    vs(m).swap(board);
-
-    for(int i = 0; i < n; i++) {
-        string str;
-        cin >> str;
-        for(int j = 0; j < m; j++) {
-            board[j].pb(str[j]);
-        }
-    }
-
+    vs(n).swap(board);
     for(auto &str : board) {
-        reverse(all(str));
+        cin >> str;
     }
 
-    int count{};
-    for( ; count < n; count++) {
-        unordered_set<string> chk;
-        for(auto &str : board) {
-            if(chk.find(str) != chk.end()) {
-                cout << count - 1; 
-                exit(0);
-            }
-            chk.insert(str);
-            str.pop_back();
-        }
+    int st{0}, en{n};
+    while(st + 1 < en) {
+        int mid = (st + en) >> 1;
+        (solve(mid) ? st : en) = mid;
     }
 
-    cout << count - 1;
+    cout << st;
 }
