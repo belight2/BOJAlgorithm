@@ -17,7 +17,6 @@ const char nl = '\n';
 class Trie{
     private:
         string value;
-        int unused;
         map<string, Trie> nodes;
 
         bool is_exists(string &v) {
