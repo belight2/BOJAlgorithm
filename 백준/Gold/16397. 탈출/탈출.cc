@@ -36,7 +36,7 @@ pair<int, bool> buttonB(int cur) {
 }
 
 int n, t, g;
-int d[1'000'005];
+int d[100'005];
 pair<int, bool> (*func[])(int) = {buttonA, buttonB};
 
 int main() {
