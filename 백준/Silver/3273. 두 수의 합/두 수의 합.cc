@@ -1,28 +1,40 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
-int n, e, x, cnt, nl[1000001];
-vector<int> v;
-int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> n; 
-	for(int i = 0; i < n; i++){
-		cin >> e;
-		nl[e]++;
-		v.push_back(e);
-	}
-	cin >> x;
-	for(int i : v){
-		if(x-i <= 1000000 && x-i >0){
-			if( i != x - i && nl[x-i] == 1){
-				nl[x-i]--;
-				nl[i]--;
-				cnt++;
-			}
-			
-		}
-	}
-	cout << cnt;
+typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
+typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
+typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
+#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
+#define X first
+#define Y second
+#define pb push_back
+#define sz(x) (int((x).size()))
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+const char nl = '\n';
+
+int main() {
+    fastio(nullptr, false);
+    
+    int N;
+    cin >> N;
+
+    vi A(2'000'005);
+    for(int i = 1; i <= N; i++) {
+        int x;
+        cin >> x;
+        A[x] = i;
+    }
+    
+    int x, ans{};
+    cin >> x;
+    for(int i = 1; i <= 1'000'000; i++) {
+        if(!A[i] || i == x - i || x - i < 0) {
+            continue;
+        }
+        ans += A[x - i] && A[i] < A[x - i];
+    }
+
+    cout << ans;
 }
