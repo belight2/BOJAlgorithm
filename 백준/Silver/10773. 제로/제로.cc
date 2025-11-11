@@ -1,32 +1,36 @@
-// Authored by : chjh2129
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
+typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
+typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
+#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
+#define X first
+#define Y second
+#define pb push_back
+#define sz(x) (int((x).size()))
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+const char nl = '\n';
 
-// stack 사용 시 주의점
-// stack이 비어있는 상태에서 pop()이나 top()을 하게되면 런타임 에러가 발생합니다.
-// 그래서 항상, pop(), top() 명령어 수행 전 스택이 비어있는지 확인해야 합니다.
+int main() {
+    fastio(nullptr, false);
 
-int k, x;
-stack<int> stk;
+    int K{};
+    cin >> K;
 
-int main(){
-  cin.tie(nullptr)->sync_with_stdio(false);
+    vector<ll> stk{};
+    while(K --> 0) {
+        ll cur{};
+        cin >> cur;
 
-  // input & init
-  cin >> k;
-  while(k--){
-    // 정수를 조건식에 넣을 경우, 0이 아닌 경우 모두 true, 0이면 false입니다.
-    if(cin >> x, x) stk.push(x);
-    else if(!stk.empty()) stk.pop();
-  }
+        if(cur) {
+            stk.pb(cur);
+        } else if(!stk.empty()) {
+            stk.pop_back();
+        }
+    }
 
-  // solve
-  int ans{};
-  while(!stk.empty()){
-    ans += stk.top();
-    stk.pop();
-  }
-
-  // output
-  cout << ans;
+    cout << accumulate(all(stk), 0);
 }
