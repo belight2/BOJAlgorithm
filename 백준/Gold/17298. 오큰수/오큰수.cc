@@ -1,30 +1,38 @@
 #include <bits/stdc++.h>
-
 using namespace std;
-
-using pi = pair<int, int>;
+typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
+typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
+typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
+#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
 #define X first
 #define Y second
+#define pb push_back
+#define sz(x) (int((x).size()))
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+const char nl = '\n';
 
-int n;
+int main() {
+    fastio(nullptr, false);
 
-int main(){
-  cin.tie(nullptr)->sync_with_stdio(false);
+    int N{};
+    cin >> N;
 
-  cin >> n;
-
-  vector<int> ans(n, -1);
-  stack<pi> stk;
-  int cur;
-
-  for(int i = 0; i < n; i++){
-    cin >> cur;
-    while(stk.size() && stk.top().X < cur){
-      ans[stk.top().Y] = cur;
-      stk.pop();
+    vi A(N, -1);
+    stack<pi> stk{};
+    for(int idx = 0; idx < N; idx++) {
+        int cur{};
+        cin >> cur;
+        while(sz(stk) && stk.top().X < cur) {
+            A[stk.top().Y] = cur;
+            stk.pop();
+        }
+        stk.push({cur, idx});
     }
-    stk.push({cur, i});
-  }
 
-  for(auto &x : ans) cout << x << ' ';  
+    for(auto x : A) {
+        cout << x << ' ';
+    }
 }
