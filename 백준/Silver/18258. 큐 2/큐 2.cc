@@ -1,53 +1,58 @@
-// Authored by : chjh2129
 #include <bits/stdc++.h>
-
 using namespace std;
+typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
+typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
+typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
+#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
+#define X first
+#define Y second
+#define pb push_back
+#define sz(x) (int((x).size()))
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+const char nl = '\n';
 
-int main(){
-  cin.tie(nullptr)->sync_with_stdio(false);
+int N;
+deque<int> q;
 
-  int n; // 명령어 개수
-  int head = 0; // 큐에 앞부분의 index
-  vector<int> v; // 큐로 사용할 벡터
-  // 큐는 v[head] ~ v[v.size() - 1]까지를 원소로 가짐
+int main() {
+    fastio(nullptr, false);
 
-  cin >> n; //입력
-  while(n--){
-    string command;
-    cin >> command; //명령어 입력
+    cin >> N;
 
-    // push 명령어 수행
-    if(command == "push"){
-      int x;
-      cin >> x;
-      v.push_back(x);
+    while(N--) {
+        string command;
+        cin >> command;
+        
+        if(command == "push") {
+            int newNumber{};
+            cin >> newNumber;
+            q.push_back(newNumber);
+        } else if(command == "pop") {
+            if(sz(q)) {
+                cout << q.front() << nl;
+                q.pop_front();
+            } else {
+                cout << "-1\n";
+            }
+        } else if(command == "size") {
+            cout << sz(q) << nl;
+        } else if(command == "empty") {
+            cout << q.empty() << nl;
+        } else if(command == "front") {
+            if(sz(q)) {
+                cout << q.front() << nl;
+            } else {
+                cout << "-1\n";
+            }
+        } else if(command == "back") {
+            if(sz(q)) {
+                cout << q.back() << nl;
+            } else {
+                cout << "-1\n";
+            }
+        }
     }
-    // pop 명령어 수행
-    else if(command == "pop"){
-      if(head == v.size()) cout << -1 << '\n';
-      else{
-        cout << v[head] << '\n';
-        head++;
-      } 
-    }
-    // size 명령어 수행
-    else if(command == "size"){
-      cout << v.size() - head << '\n';
-    }
-    // empty 명령어 수행
-    else if(command == "empty"){
-      if(head == v.size()) cout << 1 << '\n';
-      else cout << 0 << '\n';
-    }
-    // front 명령어 수행
-    else if(command == "front"){
-      if(head == v.size()) cout << -1 << '\n';
-      else cout << v[head] << '\n';
-    }
-    // back 명령어 수행
-    else if(command == "back"){
-      if(head == v.size()) cout << -1 << '\n';
-      else cout << v[v.size() -1] << '\n';
-    }
-  }
 }
