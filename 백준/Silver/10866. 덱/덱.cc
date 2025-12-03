@@ -1,61 +1,66 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long ll; typedef unsigned long long ull; typedef pair<int,int> pi; typedef pair<ll, ll> pl;
+typedef tuple<int, int, int> ti; typedef tuple<ll, ll, ll> tl; typedef vector<int> vi; typedef vector<ll> vl;
+typedef vector<pi> vpi; typedef vector<pl> vpl; typedef vector<ti> vti; typedef vector<tl> vtl;
+typedef vector<string> vs; typedef vector<bool> vb; typedef queue<int> qi; typedef queue<ll> ql;
+typedef queue<pi> qpi; typedef queue<pl> qpl; typedef queue<ti> qti; typedef queue<tl> qtl;
+#define fastio(x, y) cin.tie((x))->sync_with_stdio((y))
+#define X first
+#define Y second
+#define pb push_back
+#define sz(x) (int((x).size()))
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+const char nl = '\n';
 
-const int MX = 100005;
-int dat[2*MX-1];
-int head = MX, tail = MX;
+deque<int> dq;
 
-void push_front(int x){
-	dat[--head] = x;
-}
-void push_back(int x){
-	dat[tail++] = x;
-}
-void pop_front(){
-	if(head == tail) cout << -1 << '\n';
-	else cout << dat[head++] << '\n';
-}
-void pop_back(){
-	if(head == tail) cout << -1 << '\n';
-	else cout << dat[--tail] << '\n';
-}
-int size(){
-	return tail-head;
-}
-int empty(){
-	if(head == tail) return 1;
-	return 0;
-}
-int front(){
-	if(empty()) return -1;
-	return dat[head];
-}
-int back(){
-	if(empty()) return -1;
-	return dat[tail-1];
-}
-int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int t, x;
-	string s;
-	cin >> t;
-	while(t--){
-		cin >> s;
-		if( s == "push_back" ){
-			cin >> x;
-			push_back(x);
-		}
-		else if( s == "push_front"){
-			cin >> x;
-			push_front(x);
-		}
-		else if( s == "front" ) cout << front() << '\n';
-		else if( s == "back" ) cout << back() << '\n';
-		else if( s == "size" ) cout << size() << '\n';
-		else if( s == "empty") cout << empty() << '\n';
-		else if( s == "pop_front" ) pop_front();
-		else if( s == "pop_back") pop_back();
-	}
+int main() {
+    fastio(nullptr, false);
+    
+    int N{};
+    cin >> N;
+
+    while (N--) {
+        string cmd;
+        cin >> cmd;
+
+        if (cmd == "push_front") {
+            int x{};
+            cin >> x;
+            dq.push_front(x);
+        } else if (cmd == "push_back") {
+            int x{};
+            cin >> x;
+            dq.pb(x);
+        } else if (cmd == "pop_front") {
+            if (sz(dq)) {
+                int x = dq.front();
+                cout << x << nl;
+                dq.pop_front();
+            } else {
+                cout << -1 << nl;
+            }
+        } else if (cmd == "pop_back") {
+            if (sz(dq)) {
+                int x = dq.back();
+                cout << x << nl;
+                dq.pop_back();
+            } else {
+                cout << -1 << nl;
+            }
+
+        } else if (cmd == "size") {
+            cout << sz(dq) << nl;
+        } else if (cmd == "empty") {
+            cout << dq.empty() << nl;
+        } else if (cmd == "front") {
+            int x = (sz(dq) ? dq.front() : -1);
+            cout << x << nl;
+        } else if (cmd == "back") {
+            int x = (sz(dq) ? dq.back() : -1);
+            cout << x << nl;
+        }
+    }
 }
